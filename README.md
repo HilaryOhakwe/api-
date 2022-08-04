@@ -1,104 +1,52 @@
-# Node.js REST API Example
+As requested to write a simple API and create an docker image from the API. Below is a screenshot of the Dockerfile
+![image](https://user-images.githubusercontent.com/109979316/182938747-cd505d3a-d4e3-4328-894c-1c36d085f8de.png)
 
-This example shows how to implement a simple REST API using Node.js and Docker. The API has five endpoints that all return a simple response in JSON.
+The API source code can be seen in my github repository.
+![image](https://user-images.githubusercontent.com/109979316/182938991-1807355b-acc7-456e-94be-b43a9e911661.png)
 
-* GET /
-* GET /:id
-* POST /
-* PUT /
-* DELETE /
+I tried to use helm to deploy the kubernetes deployment file of the API however I had issue then I decided to use Azure pipeline to deploy to my AKS cluster.
+![image](https://user-images.githubusercontent.com/109979316/182939368-3df1b60d-3648-4ca5-9c1f-92cc158f63d3.png)
 
-## Build
+I was able to build and push the API dockerfile image to Azure container registry and kubernetes service. I created a deployment and exposed a the deployment with a load balancer.
 
-```
-docker build -t nodejs-rest-api-example .
-```
 
-## Run
+![image](https://user-images.githubusercontent.com/109979316/182939450-e80b8023-06d9-4b58-aad4-f754a3ebedea.png)
 
-Run in default port `4000`:
-```
-docker run -p 4000:4000 -d nodejs-rest-api-example
-```
 
-Run in custom port, e.g., `8080`:
-```
-docker run -e PORT=8080 -p 8080:8080 -d nodejs-rest-api-example
-```
+![image](https://user-images.githubusercontent.com/109979316/182939496-beeb7db8-19a3-410e-8ddb-08c3eba3a97d.png)
 
-## Test
 
-#### GET /
+![image](https://user-images.githubusercontent.com/109979316/182939583-0b6b2a69-7e41-4b6b-92e5-963d9b1cf6e5.png)
 
-```
-curl -i http://localhost:4000/
+I was able to access my API deployment from my browser using the load balancer API address and my container port.
 
-HTTP/1.1 200 OK
-X-Powered-By: Express
-Content-Type: application/json
-Date: Tue, 28 Feb 2017 10:38:31 GMT
-Connection: keep-alive
-Transfer-Encoding: chunked
 
-{"response":"This is GET method."}
-```
+![image](https://user-images.githubusercontent.com/109979316/182939684-0eb4c578-cf39-4b51-b220-407fe37eb543.png)
 
-#### GET /:id
 
-```
-curl -i http://localhost:4000/123
+The next line of action is deploy nginx controller.
 
-HTTP/1.1 200 OK
-X-Powered-By: Express
-Content-Type: application/json
-Date: Tue, 28 Feb 2017 10:39:04 GMT
-Connection: keep-alive
-Transfer-Encoding: chunked
+The first step to carry out is to create a namespace and add the nginx repository to helm.
 
-{"response":"This is GET method with id=123."}
-```
 
-#### POST /
 
-```
-curl -i -X POST http://localhost:4000
+![image](https://user-images.githubusercontent.com/109979316/182946435-2e84a1df-e8bc-4219-8c3e-df869663119d.png)
 
-HTTP/1.1 200 OK
-X-Powered-By: Express
-Content-Type: application/json
-Date: Tue, 28 Feb 2017 10:38:47 GMT
-Connection: keep-alive
-Transfer-Encoding: chunked
 
-{"response":"This is POST method."}
-```
+Download and install NGINX Ingress Controller in your cluster
 
-#### PUT /
+![image](https://user-images.githubusercontent.com/109979316/182947376-76917563-f0d2-4f5f-9d87-9e4149bc0f8b.png)
 
-```
-curl -i -X PUT http://localhost:4000
 
-HTTP/1.1 200 OK
-X-Powered-By: Express
-Content-Type: application/json
-Date: Tue, 28 Feb 2017 10:40:48 GMT
-Connection: keep-alive
-Transfer-Encoding: chunked
+Route Traffic to Your App
 
-{"response":"This is PUT method."}
-```
+![image](https://user-images.githubusercontent.com/109979316/182949574-45c4c202-3db8-4b76-bd2d-363867ae4e62.png)
 
-#### DELETE /
 
-```
-curl -i -X DELETE http://localhost:4000
 
-HTTP/1.1 200 OK
-X-Powered-By: Express
-Content-Type: application/json
-Date: Tue, 28 Feb 2017 10:41:11 GMT
-Connection: keep-alive
-Transfer-Encoding: chunked
 
-{"response":"This is DELETE method."}
-```
+
+
+
+
+
